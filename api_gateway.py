@@ -9,8 +9,11 @@ users = {
     'user2': 'password2'
 }
 
-# ユーザーごとにトークンを管理する辞書
+# 一旦はメモリ上に残す
 tokens = {}
+
+def token_valid(token):
+    return token in tokens
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -20,14 +23,22 @@ def login():
     if username in users and users[username] == password:
         token = secrets.token_hex(16)
         tokens[token] = username
-        return jsonify({'token': token}), 200
+        return jsonify({'token': token, 'username': username}), 200
     else:
         return jsonify({'message': 'Invalid username or password'}), 401
+
+@app.route('/api/validate_token', methods=['GET'])
+def validate_token():
+    token = request.headers.get('Authorization')
+    if token and token_valid(token):
+        return jsonify({'message': 'Valid token'}), 200
+    else:
+        return jsonify({'message': 'Invalid token'}), 401
 
 @app.route('/api/resource')
 def get_resource():
     token = request.headers.get('Authorization')
-    if token and token in tokens:
+    if token and token_valid(token):
         username = tokens[token]
         return jsonify({'message': f'This is the resource for {username}'}), 200
     else:

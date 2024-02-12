@@ -25,7 +25,7 @@ curl -X GET -H "Authorization: a7342ad288b0e571cc7d00d32c5a80a2" http://localhos
 
 curl -X GET -H "Authorization: invalid_token" http://localhost:2000/bff/resource
 # {
-#   "message": "Unauthorized"
+#   "message": "Invalid token"
 # }
 ```
 

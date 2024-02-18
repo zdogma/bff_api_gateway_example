@@ -15,15 +15,20 @@ pip install -r requirements.txt
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"username": "user1", "password": "password1"}' http://localhost:2000/bff/login
 # {
-#   "token": "a7342ad288b0e571cc7d00d32c5a80a2"
+#   "token": "Bearer 37d8e0684f9d11636765fa38280bbe8b"
 # }
 
-curl -X GET -H "Authorization: a7342ad288b0e571cc7d00d32c5a80a2" http://localhost:2000/bff/resource
+curl -X GET -H "Authorization: Bearer 37d8e0684f9d11636765fa38280bbe8b" http://localhost:2000/bff/resource
 # {
 #   "message": "This is the resource for user1"
 # }
 
 curl -X GET -H "Authorization: invalid_token" http://localhost:2000/bff/resource
+# {
+#   "message": "Unauthorized"
+# }
+
+curl -X GET -H "Authorization: Bearer invalid_token" http://localhost:2000/bff/resource
 # {
 #   "message": "Invalid token"
 # }
